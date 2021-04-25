@@ -1,0 +1,39 @@
+version: "3"
+services:
+  backend_container:
+    build:
+      context: ./
+      dockerfile: node.dockerfile
+    image: backend_im
+    stdin_open: true
+    tty: true
+    container_name: backend_container
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+      - PORT=$PORT
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+  nginx_container:
+    build:
+      context: ./.docker
+      dockerfile: nginx.dockerfile
+    image: nginx_im
+    stdin_open: true
+    container_name: nginx_container
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
