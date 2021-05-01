@@ -20,17 +20,15 @@ app.use(HttpLogger);
 // Router
 app.use("/auth", AuthRouter);
 app.get("/", (req, res, next) => {
-    logger.info('Found %s at %s', 'error', new Date());
-    logger.info('Found %s at %s', 'error', new Error('chill winston'));
-    logger.info('Found %s at %s', 'error', /WUT/);
-    logger.info('Found %s at %s', 'error', true);
-    logger.info('Found %s at %s', 'error', 100.00);
-    logger.info('Found %s at %s', 'error', ['1, 2, 3']);
+  
   try {
-    throw new Error("Error happped");
+    throw new Error("Error happpeds");
   } catch (e) {
     next(e);
   }
+});
+process.on("uncaughtException", (err) => {
+  console.log("uncaughtException", err);
 });
 
 app.listen(Env?.PORT, () => console.log(`PORT ${Env?.PORT}`));

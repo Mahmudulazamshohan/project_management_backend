@@ -18,5 +18,8 @@
     "baseUrl": "."
   },
   "include": ["**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts", "build"]
+  "exclude": ["node_modules", "**/*.spec.ts", "build"],
+  "paths": {
+    "@/*": [".//src/*"]
+  }
 }
