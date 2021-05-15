@@ -1,3 +1,4 @@
+import Env from 'dotenv'
 export default {
   mongodb: {
     host: process.env.MONGODB_HOST || "localhost",
