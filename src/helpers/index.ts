@@ -3,6 +3,7 @@ import { Env } from "../utils/env";
 import os from "os";
 import cluster from "cluster";
 import dotenv, { DotenvParseOptions } from "dotenv";
+import chalk from "chalk";
 export const debugPrint =
   process.env.NODE_ENV === "development" ? console.log : () => {};
 //
@@ -49,3 +50,14 @@ export const multiThreadingCluster = (
     callback();
   }
 };
+
+export const blueCmd = (...args: string[]) => {
+  return chalk.blue(args);
+};
+export const yellowCmd = (...args: string[]) => {
+  return chalk.yellow(args);
+};
+export const greenUnderlineCmd = (...args: string[]) => {
+  return chalk.green.underline(args);
+};
+

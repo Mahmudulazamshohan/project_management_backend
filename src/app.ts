@@ -1,6 +1,7 @@
 "use strict";
 // packages import
 import Express, { Request, Response } from "express";
+import Debug from "debug";
 import http from "http";
 import BodyParser from "body-parser";
 import Compression from "compression";
@@ -10,11 +11,12 @@ import { AuthRouter } from "./routes/index";
 import HttpLogger, { logger } from "./helpers/logger.helpers";
 import database from "./utils/database";
 import { Env } from "./utils/env";
-import { env, multiThreadingCluster } from "./helpers";
+import { blueCmd, debugPrint, env, multiThreadingCluster } from "./helpers";
 import { HttpError } from "./utils/exceptions";
 import { HttpStatusCode } from "./utils/httpstatuscode";
 
 database();
+
 function errorHandler(err, req, res, next) {
   console.log("errorHandler", err);
   res.status(err.status || 500).send(err.message);
@@ -71,6 +73,6 @@ app.use((err, req: Request, res: Response, next) => {
 // cluster cpu processingF
 multiThreadingCluster(
   async () =>
-    await app.listen(Env?.PORT, () => console.log(`PORT ${Env?.PORT}`)),
+    await app.listen(Env?.PORT, () => debugPrint(blueCmd(`PORT - ${Env?.PORT}`))),
   false
 );

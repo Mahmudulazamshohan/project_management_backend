@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import URL from "url";
-import { debugPrint } from ".";
+import { blueCmd, debugPrint, greenUnderlineCmd } from ".";
 import winston from "winston";
 import path from "path";
+import chalk from "chalk";
 export const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
@@ -19,12 +20,18 @@ export const logger = winston.createLogger({
 });
 
 export default (req: Request, res: Response, next: NextFunction) => {
+  //console.log('req',req.method)
+
   debugPrint(
-    URL.format({
-      protocol: req.protocol,
-      host: req.get("host"),
-      pathname: req.originalUrl,
-    })
+    blueCmd(req.method),
+    "-",
+    greenUnderlineCmd(
+      URL.format({
+        protocol: req.protocol,
+        host: req.get("host"),
+        pathname: req.originalUrl,
+      })
+    )
   );
   next();
 };
