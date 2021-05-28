@@ -11,7 +11,7 @@ import { AuthRouter } from "./routes/index";
 import HttpLogger, { logger } from "./helpers/logger.helpers";
 import database from "./utils/database";
 import { Env } from "./utils/env";
-import { blueCmd, debugPrint, env, multiThreadingCluster } from "./helpers";
+import { redBgCmd,blueCmd, debugPrint, env, multiThreadingCluster, redCmd } from "./helpers";
 import { HttpError } from "./utils/exceptions";
 import { HttpStatusCode } from "./utils/httpstatuscode";
 
@@ -58,9 +58,9 @@ app.get("/", (req, res, next) => {
 });
 
 app.use((err, req: Request, res: Response, next) => {
-  console.log("*** logErrors:", err.message);
+  debugPrint(redCmd("Exception:"), redBgCmd(err));
   //mongoDal.log(err.message, err);
-  res.status(err.httpCode).json({
+  res.status(404).json({
     code: err.httpCode,
     data: {},
     message: err.message,

@@ -1,9 +1,15 @@
 import { Router, Response, Request } from "express";
+import fs from "fs";
+import path from "path";
+
 import { AuthMiddleware } from "./../middlewares/auth.middleware";
 import JsonWebToken from "jsonwebtoken";
+
 const router = Router();
+
 router.get("/login", (req: Request, res: Response) => {
   const { email, password } = req.query;
+  let key = fs.readFileSync(path.join(__dirname, "../../private.key"));
 
   if (email && password) {
     var token = JsonWebToken.sign(
@@ -11,12 +17,19 @@ router.get("/login", (req: Request, res: Response) => {
         email,
         password,
       },
-      "somesecret",
+      key,
       {
+        algorithm: "RS256",
         expiresIn: "1m",
       }
     );
-    res.json({ token });
+    console.log(JsonWebToken.verify(token,key))
+    res.json({
+      status: 200,
+      data: {
+        token,
+      },
+    });
   } else {
     res.status(400).json({ message: "Unauthorized" });
   }
