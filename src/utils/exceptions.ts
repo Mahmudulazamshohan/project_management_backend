@@ -5,6 +5,13 @@ export class BaseError extends Error {
   public readonly httpCode: HttpStatusCode;
   public readonly isOperational: boolean;
 
+  /**
+   *  Base Error constructor
+   * @param name
+   * @param httpCode
+   * @param description
+   * @param isOperational
+   */
   constructor(
     name: string,
     httpCode: HttpStatusCode,
@@ -22,4 +29,3 @@ export class BaseError extends Error {
   }
 }
 export class HttpError extends BaseError {}
-

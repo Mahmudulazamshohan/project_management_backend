@@ -11,7 +11,14 @@ import { AuthRouter } from "./routes/index";
 import HttpLogger, { logger } from "./helpers/logger.helpers";
 import database from "./utils/database";
 import { Env } from "./utils/env";
-import { redBgCmd,blueCmd, debugPrint, env, multiThreadingCluster, redCmd } from "./helpers";
+import {
+  redBgCmd,
+  blueCmd,
+  debugPrint,
+  env,
+  multiThreadingCluster,
+  redCmd,
+} from "./helpers";
 import { HttpError } from "./utils/exceptions";
 import { HttpStatusCode } from "./utils/httpstatuscode";
 
@@ -50,7 +57,7 @@ process.on("uncaughtException", function (err) {
 app.use("/auth", AuthRouter);
 app.get("/", (req, res, next) => {
   throw new HttpError(
-    "na",
+    HttpError.name,
     HttpStatusCode.BAD_GATEWAY,
     "this is description",
     false
@@ -59,8 +66,8 @@ app.get("/", (req, res, next) => {
 
 app.use((err, req: Request, res: Response, next) => {
   debugPrint(redCmd("Exception:"), redBgCmd(err));
-  //mongoDal.log(err.message, err);
-  res.status(404).json({
+
+  res.status(err.httpCode).json({
     code: err.httpCode,
     data: {},
     message: err.message,
@@ -73,6 +80,8 @@ app.use((err, req: Request, res: Response, next) => {
 // cluster cpu processingF
 multiThreadingCluster(
   async () =>
-    await app.listen(Env?.PORT, () => debugPrint(blueCmd(`PORT - ${Env?.PORT}`))),
+    await app.listen(Env?.PORT, () =>
+      debugPrint(blueCmd(`PORT - ${Env?.PORT}`))
+    ),
   false
 );

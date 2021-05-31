@@ -7,23 +7,21 @@ import JsonWebToken from "jsonwebtoken";
 
 const router = Router();
 
-router.get("/login", (req: Request, res: Response) => {
+router.get("/login", async (req: Request, res: Response) => {
   const { email, password } = req.query;
-  let key = fs.readFileSync(path.join(__dirname, "../../private.key"));
+  let key = await fs.readFileSync(path.join(__dirname, "../../private.pem"));
+  let fields = {
+    email,
+    password,
+  };
+  let options: object = {
+    algorithm: "RS256",
+    expiresIn: "1m",
+  };
 
   if (email && password) {
-    var token = JsonWebToken.sign(
-      {
-        email,
-        password,
-      },
-      key,
-      {
-        algorithm: "RS256",
-        expiresIn: "1m",
-      }
-    );
-    console.log(JsonWebToken.verify(token,key))
+    var token = JsonWebToken.sign(fields, key, options);
+
     res.json({
       status: 200,
       data: {
