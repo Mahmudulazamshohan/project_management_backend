@@ -11,6 +11,7 @@ import { AuthRouter } from "./routes/index";
 import HttpLogger, { logger } from "./helpers/logger.helpers";
 import database from "./utils/database";
 import { Env } from "./utils/env";
+import appConfig from "./configs/app";
 import {
   redBgCmd,
   blueCmd,
