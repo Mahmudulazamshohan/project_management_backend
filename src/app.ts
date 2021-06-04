@@ -1,10 +1,9 @@
 "use strict";
 // packages import
 import Express, { Request, Response } from "express";
-import Debug from "debug";
-import http from "http";
 import BodyParser from "body-parser";
 import Compression from "compression";
+import swaggerUi from "swagger-ui-express";
 
 // modules import
 import { AuthRouter } from "./routes/index";
@@ -12,6 +11,8 @@ import HttpLogger, { logger } from "./helpers/logger.helpers";
 import database from "./utils/database";
 import { Env } from "./utils/env";
 import appConfig from "./configs/app";
+import swaggerDocument from "./swagger.json";
+
 import {
   redBgCmd,
   blueCmd,
@@ -76,6 +77,7 @@ app.use((err, req: Request, res: Response, next) => {
   });
 });
 
+app.use("/docs/api", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //function logErrors (err: Error, req: Request, res: Response, next: NextFunction) {
 
 // cluster cpu processingF

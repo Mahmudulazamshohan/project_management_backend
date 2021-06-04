@@ -15,7 +15,8 @@
     "strict": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "resolveJsonModule": true,
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "**/*.spec.ts", "build"],
