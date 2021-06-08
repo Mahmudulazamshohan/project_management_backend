@@ -1,8 +1,7 @@
 import auth from "../configs/auth";
-import Users from '../models/user/user.model'
+import Users from "../models/user/user.model";
 
 test("config.auth data format check", () => {
-
   const data = {
     guards: {
       api: {
@@ -18,5 +17,6 @@ test("config.auth data format check", () => {
       },
     },
   };
+
   expect(auth).toEqual(data);
 });
