@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "set NODE_ENV=development&&nodemon src/app.ts",
-    "start": "set NODE_ENV=development&&nodemon src/app.ts",
+    "start:dev": "set NODE_ENV=development&&nodemon src/server.ts",
+    "start": "set NODE_ENV=development&&nodemon src/server.ts",
     "build": "tsc --project ./",
-    "start:prod": "set NODE_ENV=production&&node build/src/app.js",
+    "start:prod": "set NODE_ENV=production&&node build/src/server.js",
     "test": "jest"
   },
   "author": "",

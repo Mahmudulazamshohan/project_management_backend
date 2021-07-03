@@ -1,90 +1,36 @@
-"use strict";
-// packages import
-import Express, { Request, Response } from "express";
-import BodyParser from "body-parser";
-import Compression from "compression";
-import swaggerUi from "swagger-ui-express";
+import express from "express";
 
-// modules import
-import { AuthRouter } from "./routes/index";
-import HttpLogger, { logger } from "./helpers/logger.helpers";
-import database from "./utils/database";
-import { Env } from "./utils/env";
-import appConfig from "./configs/app";
-import swaggerDocument from "./swagger.json";
+class App {
+  public app: express.Application;
+  public port: number;
+  private middlewares: Array<any>;
 
-import {
-  redBgCmd,
-  blueCmd,
-  debugPrint,
-  env,
-  multiThreadingCluster,
-  redCmd,
-} from "./helpers";
-import { HttpError } from "./utils/exceptions";
-import { HttpStatusCode } from "./utils/httpstatuscode";
+  constructor(controllers, port, middlewares) {
+    this.app = express();
+    this.port = port;
+    this.middlewares = middlewares;
 
-database();
+    this.initializeMiddlewares();
+    this.initializeControllers(controllers);
+  }
 
-function errorHandler(err, req, res, next) {
-  console.log("errorHandler", err);
-  res.status(err.status || 500).send(err.message);
+  private initializeMiddlewares() {
+    this.middlewares.forEach((middleware) => {
+      this.app.use(middleware);
+    });
+  }
+
+  private initializeControllers(controllers) {
+    controllers.forEach((controller) => {
+      this.app.use("/", controller.router);
+    });
+  }
+
+  public listen() {
+    console.log("port");
+    this.app.listen(this.port, () => {
+      console.log(`App listening on the port ${this.port}`);
+    });
+  }
 }
-const app = Express();
-
-process.on("uncaughtException", (err) => {
-  console.log("uncaughtException", err);
-});
-
-// Express Plugins
-app.use(Compression());
-app.use(BodyParser.urlencoded({ extended: true }));
-app.use(BodyParser.json());
-app.use(HttpLogger);
-app.use(errorHandler);
-// Error handler A: Express Error middleware
-app.use(function (err, req, res, next) {
-  console.log("**************************");
-  console.log("* [Error middleware]: err:", err);
-  console.log("**************************");
-  next(err);
-});
-// Error handler B: Node's uncaughtException handler
-process.on("uncaughtException", function (err) {
-  console.log("**************************");
-  console.log("* [process.on(uncaughtException)]: err:", err);
-  console.log("**************************");
-});
-// Router
-app.use("/auth", AuthRouter);
-app.get("/", (req, res, next) => {
-  throw new HttpError(
-    HttpError.name,
-    HttpStatusCode.BAD_GATEWAY,
-    "this is description",
-    false
-  );
-});
-
-app.use((err, req: Request, res: Response, next) => {
-  debugPrint(redCmd("Exception:"), redBgCmd(err));
-
-  res.status(err.httpCode).json({
-    code: err.httpCode,
-    data: {},
-    message: err.message,
-    errors: err,
-  });
-});
-
-app.use("/docs/api", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-//function logErrors (err: Error, req: Request, res: Response, next: NextFunction) {
-
-// cluster cpu processingF
-multiThreadingCluster(
-  async () =>
-    await app.listen(Env?.PORT, () =>
-      debugPrint(blueCmd(`PORT - ${Env?.PORT}`))
-    ),
-  false
-);
+export default App;
