@@ -1,8 +1,12 @@
 import * as express from "express";
+import { ControllerInterface } from "src/utils/interfaces/controller.interface";
 
-class PostsController {
-  public path = "/posts";
-  public router = express.Router();
+class PostsController implements ControllerInterface {
+  // public path = "/posts";
+  // public router = express.Router();
+  path = "/posts";
+  router = express.Router();
+
   private posts: any = [
     {
       author: "Marcin",
