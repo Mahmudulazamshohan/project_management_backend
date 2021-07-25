@@ -27,13 +27,20 @@ import {
 
 import { HttpError } from "./utils/exceptions";
 import { HttpStatusCode } from "./utils/httpstatuscode";
+
 import PostsController from "./controllers/post.controller";
+import LoginController from "./controllers/login.controller";
+
 database();
 
 function errorHandler(err, req, res, next) {
   console.log("errorHandler", err);
   res.status(err.status || 500).send(err.message);
 }
-const app = new App([new PostsController()], Env?.PORT, []);
+const app = new App(
+  [new PostsController(), new LoginController()],
+  Env?.PORT,
+  []
+);
 
 app.listen();
