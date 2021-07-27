@@ -9,7 +9,7 @@ class App {
     this.app = express();
     this.port = port;
     this.middlewares = middlewares;
-
+    //init controllers and middleware
     this.initializeMiddlewares();
     this.initializeControllers(controllers);
   }
