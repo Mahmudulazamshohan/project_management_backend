@@ -1,6 +1,6 @@
 import { Router, Response, Request } from "express";
 import * as express from "express";
-import { ControllerInterface } from "src/utils/interfaces/controller.interface";
+import { ControllerInterface } from "../utils/interfaces/controller.interface";
 
 class LoginController implements ControllerInterface {
   path = "/login";
@@ -13,8 +13,6 @@ class LoginController implements ControllerInterface {
   public intializeRoutes() {
     this.router.get(this.path, this.index);
   }
-  public index(req: Request, res: Response) {
-    res.json({});
-  }
+  public index(req: Request, res: Response) {}
 }
 export default LoginController;

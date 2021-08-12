@@ -1,5 +1,11 @@
 import * as express from "express";
-import { ControllerInterface } from "src/utils/interfaces/controller.interface";
+import { ControllerInterface } from "../utils/interfaces/controller.interface";
+
+import { Router, Response, Request } from "express";
+import fs from "fs";
+import path from "path";
+import JsonWebToken from "jsonwebtoken";
+import JsonResource from "../utils/response";
 
 class PostsController implements ControllerInterface {
   path = "/posts";
@@ -26,16 +32,24 @@ class PostsController implements ControllerInterface {
     request: express.Request,
     response: express.Response
   ) => {
-    response.json(this.posts);
+    JsonResource.file(
+      response,
+      path.join(__dirname, "../swagger.json")
+    );
   };
 
   createAPost = (
     request: express.Request,
     response: express.Response
   ) => {
-    const post: any = request.body;
-    this.posts.push(post);
-    response.send(post);
+    const body: any = request.body;
+
+    type formats = {
+      email: string;
+      password: string;
+    };
+
+    return JsonResource.json<formats>(response, body);
   };
 }
 

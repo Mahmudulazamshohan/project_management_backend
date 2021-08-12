@@ -1,4 +1,8 @@
+import bodyParser from "body-parser";
+import compression from "compression";
 import express from "express";
+import { blueCmd, debugPrint } from "./helpers";
+import { Env } from "./utils/env";
 
 class App {
   public app: express.Application;
@@ -9,6 +13,11 @@ class App {
     this.app = express();
     this.port = port;
     this.middlewares = middlewares;
+
+    this.app.use(compression());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(bodyParser.json());
+
     //init controllers and middleware
     this.initializeMiddlewares();
     this.initializeControllers(controllers);
@@ -27,9 +36,8 @@ class App {
   }
 
   public listen() {
-    console.log("port");
     this.app.listen(this.port, () => {
-      console.log(`App listening on the port ${this.port}`);
+      debugPrint(blueCmd(`App Listening PORT - ${this.port}`));
     });
   }
 }
